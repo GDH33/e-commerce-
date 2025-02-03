@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
 import Books from "./pages/Books";
 import BookInfo from "./pages/BookInfo";
@@ -12,7 +12,7 @@ import { books } from "./data";
 function App() {
  const [cart, setCart] = useState([]);
 
- function addToCart(book) {
+ function addItemToCart(book) {
   const dupeItem = cart.find((item) => item.id === book.id);
   setCart((oldCart) =>
     dupeItem
@@ -81,34 +81,33 @@ return (
   <Router>
     <div className="App">
       <Nav cart={cart} />
-      <Routes>
-        <Route exact path="/" component={<Home />} />
+      <Switch>
+        <Route exact path="/" component={Home} />
         <Route 
           exact 
           path="/books" 
-          element={() => <Books books={books} />} 
+          render={() => <Books books={books} />} 
         />
         <Route 
           path="/books/:id" 
-          element={() => (
+          render={() => (
             <BookInfo 
               books={books} 
-              addItemToCart={addToCart} 
+              addItemToCart={addItemToCart} 
               cart={cart} 
             />
           )} 
         />
         <Route 
           path="/cart" 
-          element={
+          render={() => (
             <Cart 
-              books={books}
               cart={cart} 
-              updateCart={updateCart}
+              updateCart={updateCart} 
             />
-          } 
+          )} 
         />
-      </Routes>
+      </Switch>
         <Footer />
       </div>
     </Router>
